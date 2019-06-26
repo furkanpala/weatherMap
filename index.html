@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+    <style>
+        html,body {
+            margin : 0;
+            padding : 0;
+            height: 100%;
+        }
+        h1 {
+            text-align: center;
+            margin : 0;
+            padding : 0;
+            line-height: 40px;
+        }
+        #weatherMap {
+            height: calc(100% - 100px);
+        }
+    </style>
+</head>
+<body>
+    <h1 id="header">World Live Weather Map from OpenWeatherMap API</h1></br>
+    <h1>Gathered %<span id="progress">0</span> of capital cities</h6>
+    <div id="weatherMap"></div>
+    <script src="main.js"></script>
+    <script>
+        const leftAttr = document.getElementsByClassName("leaflet-bottom leaflet-left")[0];
+        const leftBox = document.createElement("div");
+        leftBox.className = "leaflet-control-attribution leaflet-control";
+        const attrContext = document.createElement("a");
+        attrContext.href = "https://restcountries.eu/rest/v2/all";
+        attrContext.text = "Cities taken from https://restcountries.eu/rest/v2/all";
+        leftBox.appendChild(attrContext);
+        leftAttr.appendChild(leftBox);
+    </script>
+</body>
+</html>
