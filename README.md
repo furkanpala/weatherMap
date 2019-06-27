@@ -1,4 +1,5 @@
 # World Live Weather Map
-Used API's:
+Dependicies:
+- Leaflet.js
 - Rest Countries
 - OpenWeatherMap
