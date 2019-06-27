@@ -1,4 +1,5 @@
 const API_KEY = "94e070be6b974d978eeb670ab2fa7fea";
+const KELVIN = -273.15;
 
 const capitalsApi = "https://restcountries.eu/rest/v2/all";
 let capitals = [];
@@ -23,7 +24,7 @@ async function getCapitals() {
 async function getWeather(capitalName) {
     const weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${capitalName}&APPID=${API_KEY}`);
     const jsonData = await weather.json();
-    const cityData = {iconID:jsonData.weather[0].icon,pos:jsonData.coord,desc : jsonData.weather[0].description};
+    const cityData = {iconID:jsonData.weather[0].icon,pos:jsonData.coord,description : jsonData.weather[0].main,temp:(jsonData.main.temp + KELVIN).toFixed(2)};
     return cityData;
 }
 
@@ -36,7 +37,8 @@ async function plot(capitalName) {
             iconSize: [76, 76],
             iconAnchor: [38, 38],
         });
-        L.marker([cityData.pos.lat,cityData.pos.lon],{icon:myIcon,title:cityData.desc}).addTo(mymap);
+        const mymarker = L.marker([cityData.pos.lat,cityData.pos.lon],{icon:myIcon,title:cityData.desc}).addTo(mymap);
+        mymarker.bindPopup(cityData.description + "<br/>" + cityData.temp + "&degC");
     }   
     catch(error) {
         console.log("Could not get the city " + capitalName);
