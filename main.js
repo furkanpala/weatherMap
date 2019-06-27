@@ -7,13 +7,15 @@ let capitals = [];
 const mymap = L.map('weatherMap').setView([39, 35], 4);
 const attr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>';
 const tileURL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-L.tileLayer(tileURL,{attribution : attr}).addTo(mymap);
+L.tileLayer(tileURL, {
+    attribution: attr
+}).addTo(mymap);
 
 async function getCapitals() {
     const data = await fetch(capitalsApi);
     const jsonData = await data.json();
 
-    for(const data of jsonData) {
+    for (const data of jsonData) {
         const capitalName = data.capital;
         if (capitalName != "") {
             capitals.push(capitalName);
@@ -24,7 +26,12 @@ async function getCapitals() {
 async function getWeather(capitalName) {
     const weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${capitalName}&APPID=${API_KEY}`);
     const jsonData = await weather.json();
-    const cityData = {iconID:jsonData.weather[0].icon,pos:jsonData.coord,description : jsonData.weather[0].main,temp:(jsonData.main.temp + KELVIN).toFixed(2)};
+    const cityData = {
+        iconID: jsonData.weather[0].icon,
+        pos: jsonData.coord,
+        description: jsonData.weather[0].main,
+        temp: (jsonData.main.temp + KELVIN).toFixed(2)
+    };
     return cityData;
 }
 
@@ -37,10 +44,12 @@ async function plot(capitalName) {
             iconSize: [76, 76],
             iconAnchor: [38, 38],
         });
-        const mymarker = L.marker([cityData.pos.lat,cityData.pos.lon],{icon:myIcon,title:cityData.desc}).addTo(mymap);
+        const mymarker = L.marker([cityData.pos.lat, cityData.pos.lon], {
+            icon: myIcon,
+            title: cityData.desc
+        }).addTo(mymap);
         mymarker.bindPopup(cityData.description + "<br/>" + cityData.temp + "&degC");
-    }   
-    catch(error) {
+    } catch (error) {
         console.log("Could not get the city " + capitalName);
     }
 }
@@ -50,10 +59,9 @@ getCapitals().then(() => {
     timer = setInterval(() => {
         if (i == capitals.length) {
             clearInterval(timer);
-        }
-        else {
+        } else {
             plot(capitals[i]);
-            document.getElementById("progress").innerText =  ((100 * (i + 1)) / capitals.length ).toFixed(2);
+            document.getElementById("progress").innerText = ((100 * (i + 1)) / capitals.length).toFixed(2);
             i++;
         }
     }, 1000);
